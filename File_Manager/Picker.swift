@@ -12,13 +12,16 @@ class Picker {
     
     static let defaultPicker = Picker()
     
-    lazy var imagePicker: UIImagePickerController = {
+    enum message: String {
+        case empty = "Password is empty"
+        case incorrect = "Please enter valid password"
+        case minLengh = "Minimum 4 characters"
+    }
+    
+    var imagePicker: UIImagePickerController = {
         var picker = UIImagePickerController()
-        
         picker.sourceType = .photoLibrary
         picker.allowsEditing = true
-        
-        
         return picker
     }()
     
@@ -26,4 +29,12 @@ class Picker {
         vc.present(imagePicker, animated: true)
     }
     
+    func showAlert(title: String, message: String, in viewController: UIViewController) {
+        
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let alertAction = UIAlertAction(title: "Ok", style: .default)
+        alert.addAction(alertAction)
+        
+        viewController.present(alert, animated: true)
+    }
 }

@@ -8,13 +8,18 @@
 import UIKit
 
 class MainTableViewController: UITableViewController, UINavigationControllerDelegate {
-        
-    var model = Model(path: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0])
-        
+            
+    var model = Model(path: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first ?? "")
+    
+    var settings = SettingsManager()
+    
+    var settingsVC = SettingsViewController()
+            
     override func viewDidLoad() {
         super.viewDidLoad()
         
         Picker.defaultPicker.imagePicker.delegate = self
+        settingsVC.delegate = self
 
     }
 
@@ -30,7 +35,9 @@ class MainTableViewController: UITableViewController, UINavigationControllerDele
         
         var configuration = UIListContentConfiguration.cell()
         
-        configuration.text = model.images[indexPath.row]
+        let imagesSorted = settings.sortedImage(by: settings.sortByABC)
+        
+        configuration.text = imagesSorted[indexPath.row]
                 
         cell.contentConfiguration = configuration
         
@@ -41,7 +48,6 @@ class MainTableViewController: UITableViewController, UINavigationControllerDele
     @IBAction func addImage(_ sender: UIBarButtonItem) {
         Picker.defaultPicker.showImagePicker(in: self)
     }
-    
     
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
@@ -55,7 +61,6 @@ class MainTableViewController: UITableViewController, UINavigationControllerDele
             tableView.reloadData()
         }
     }
-
 }
 
 extension MainTableViewController: UIImagePickerControllerDelegate {

@@ -19,7 +19,7 @@ class Model {
     var title: String {
         return NSString(string: path).expandingTildeInPath
     }
-        
+    
     var images: [String] {
         return (try? FileManager.default.contentsOfDirectory(atPath: path)) ?? []
     }
